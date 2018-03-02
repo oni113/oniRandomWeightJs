@@ -1,0 +1,66 @@
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>Math.random() 에 확률 부여 (가중치)</title>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+</script>
+<script type="text/javascript">
+var firstNum = 0;
+var secondNum = 0;
+var defaultWeight = 1 / 6;
+
+function getFirstNum() {
+    return Math.floor(Math.random() * (6 - 1 + 1)) + 1;
+}
+
+function getSecondNum(weight) {
+    var weightSpec = {
+      1 : defaultWeight,
+      2 : defaultWeight,
+      3 : defaultWeight,
+      4 : defaultWeight,
+      5 : defaultWeight,
+      6 : defaultWeight
+  };
+
+  var otherWeight = 1 -weight;
+  var weightTable = [];
+
+  for (var i = 1; i <= 6; i ++) {
+      if (i === firstNum) {
+        weightSpec[i] = weight;
+    } else {
+        weightSpec[i] = otherWeight;
+    }
+
+    for (var j = 0; j < weightSpec[i] * 10; j++) {
+        weightTable.push(i);
+    }
+  }
+
+    console.log(weightTable);
+
+    return weightTable[Math.floor(Math.random() * weightTable.length)];
+}
+
+$(document).ready(function () {
+  $('#btn_get_1st').on('click', function () {
+      firstNum = getFirstNum();
+    $('#firstNum').html(firstNum);
+  });
+
+  $('#btn_get_2nd').on('click', function () {
+      var $weight = $('#weight');
+      secondNum = getSecondNum($weight.val());
+    $('#secondNum').html(secondNum);
+    console.log(firstNum === secondNum);
+  });
+});
+</script>
+</head>
+<body>
+    <p>첫번째 수 : <span id="firstNum"></span></p><button id="btn_get_1st">생성</button>
+    <p>같은 수 나올 확률 (0.1 ~ 1.0) : <input id="weight" type="number" min="0.1" max="1" step="0.1"/></p>
+    <p>두번째 수 : <span id="secondNum"></span></p><button id="btn_get_2nd">생성</button>
+</body>
+</html>
